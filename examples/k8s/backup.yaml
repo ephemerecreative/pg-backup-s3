@@ -1,0 +1,46 @@
+apiVersion: batch/v1beta1
+kind: CronJob
+metadata:
+  name: database-backup
+spec:
+  schedule: "0 0 * * *"
+  jobTemplate:
+    spec:
+      template:
+        spec:
+          restartPolicy: OnFailure
+          containers:
+            - name: db-backup
+              image: ephemerecreative/pg-backup-s3:latest
+              env:
+                - name: S3_ENDPOINT
+                  value: "space-name.region.digitaloceanspaces.com"
+                - name: S3_REGION
+                  value: "US"
+                - name: S3_ACCESS_KEY_ID
+                  valueFrom:
+                    secretKeyRef:
+                      name: "database"
+                      key: "backup-access-key-id"
+                - name: S3_SECRET_ACCESS_KEY
+                  valueFrom:
+                    secretKeyRef:
+                      name: "database"
+                      key: "backup-secret-access-key"
+                - name: S3_BUCKET
+                  value: "space-name"
+                - name: BUCKET_PATH
+                  value: "backups"
+                - name: PGUSER
+                  value: "postgres"
+                - name: PGPASSWORD
+                  valueFrom:
+                    secretKeyRef:
+                      name: "database"
+                      key: "postgresql-password"
+                - name: PGHOST
+                  value: "database-postgresql-ha-pgpool"
+                - name: PGPORT
+                  value: "5432"
+                - name: PGDATABASE
+                  value: "database"
