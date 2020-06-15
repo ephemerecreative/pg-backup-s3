@@ -1,5 +1,7 @@
 # pg-backup-s3
 
+![Docker Cloud Automated Build](https://img.shields.io/docker/cloud/automated/ephemerecreative/pg-backup-s3) ![Docker Cloud Build Status](https://img.shields.io/docker/cloud/build/ephemerecreative/pg-backup-s3)
+
 _NOTE: We are trying this out in one of our projects, but haven't tested it in a real production environment._
 
 Simple utility to backup a Postgres database to S3-compatible storage.
